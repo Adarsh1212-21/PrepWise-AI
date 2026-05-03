@@ -24,9 +24,14 @@ const Login = () => {
             {/* Left Panel */}
             <div className='auth-left'>
                 <div className='auth-left__logo'>
-                    <span className='auth-left__logo-icon'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                    </span>
+                    
+                        <img 
+  src="/main_icon.svg" 
+  alt="Prepwise AI" 
+  width={25} 
+  height={25} 
+/>
+                    
                     AI Interview Coach
                 </div>
                 <div className='auth-left__hero'>
