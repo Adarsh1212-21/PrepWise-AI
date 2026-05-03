@@ -73,26 +73,23 @@ async function getAllInterviewReportsController(req, res) {
  * @description Controller to generate resume PDF based on user self description, resume and job description.
  */
 async function generateResumePdfController(req, res) {
-    const { interviewReportId } = req.params
+    try {
+        const { interviewReportId } = req.params
+        const interviewReport = await interviewReportModel.findById(interviewReportId)
 
-    const interviewReport = await interviewReportModel.findById(interviewReportId)
+        if (!interviewReport) {
+            return res.status(404).json({ message: "Interview report not found." })
+        }
 
-    if (!interviewReport) {
-        return res.status(404).json({
-            message: "Interview report not found."
-        })
+        const { resume, jobDescription, selfDescription } = interviewReport
+        const html = await generateResumePdf({ resume, jobDescription, selfDescription })
+
+        res.status(200).json({ html })  // ← send HTML as JSON
+
+    } catch (err) {
+        console.error("Resume Error:", err.message)
+        res.status(500).json({ message: err.message })
     }
-
-    const { resume, jobDescription, selfDescription } = interviewReport
-
-    const pdfBuffer = await generateResumePdf({ resume, jobDescription, selfDescription })
-
-    res.set({
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename=resume_${interviewReportId}.pdf`
-    })
-
-    res.send(pdfBuffer)
 }
 
 module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }

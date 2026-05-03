@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
-const htmlPdf = require("html-pdf-node")
+
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
@@ -56,14 +56,20 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 }
 
 
-async function generatePdfFromHtml(htmlContent) {
-  const file = { content: htmlContent }
-  const options = {
-    format: "A4",
-    margin: { top: "20mm", bottom: "20mm", left: "15mm", right: "15mm" }
-  }
-  const pdfBuffer = await htmlPdf.generatePdf(file, options)
-  return pdfBuffer
+async function generateResumePdf({ resume, selfDescription, jobDescription }) {
+    // ... keep your prompt same ...
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(resumePdfSchema),
+        }
+    })
+
+    const jsonContent = JSON.parse(response.text)
+    return jsonContent.html  // ← return HTML string, not pdfBuffer
 }
 
 
