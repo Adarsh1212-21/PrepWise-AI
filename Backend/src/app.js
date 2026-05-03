@@ -9,7 +9,7 @@ app.use(cookieParser())
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://prep-wise-ai-nu.vercel.app"  // ← add this
+    "https://prep-wise-ai-nu.vercel.app"
   ],
   credentials: true
 }))
