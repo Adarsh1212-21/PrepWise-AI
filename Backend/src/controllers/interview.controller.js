@@ -98,4 +98,4 @@ async function deleteInterviewReportController(req, res) {
     res.status(200).json({ message: "Interview report deleted successfully." })
 }
 
-module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }
+module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController , deleteInterviewReportController }
