@@ -34,12 +34,22 @@ export const getAllInterviewReports = async () => {
     return response.data
 }
 
-// ← updated to use html2pdf
 export const generateResumePdf = async ({ interviewReportId }) => {
     const response = await api.post(`/api/interview/resume/pdf/${interviewReportId}`)
     const { html } = response.data
 
-    html2pdf()
+    // ✅ check if html2pdf is available
+    if (typeof html2pdf === "undefined") {
+        console.error("html2pdf not loaded")
+        return
+    }
+
+    // ✅ create a container element for html2pdf to render
+    const element = document.createElement("div")
+    element.innerHTML = html
+    document.body.appendChild(element)
+
+    await html2pdf()
         .set({
             margin: [20, 15],
             filename: `resume_${interviewReportId}.pdf`,
@@ -47,6 +57,9 @@ export const generateResumePdf = async ({ interviewReportId }) => {
             html2canvas: { scale: 2 },
             jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
         })
-        .from(html)
-        .save()  
+        .from(element)
+        .save()
+
+    // ✅ clean up
+    document.body.removeChild(element)
 }
