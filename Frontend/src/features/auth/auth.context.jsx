@@ -11,6 +11,12 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const getAndSetUser = async () => {
             try {
+
+                const token = localStorage.getItem("token")
+            if (!token) {          
+                setLoading(false)
+                return
+            }
                 const data = await getMe()
                 setUser(data.user)
             } catch (err) {
