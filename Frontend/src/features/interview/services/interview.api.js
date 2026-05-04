@@ -1,5 +1,5 @@
 import axios from "axios";
-import html2pdf from "html2pdf.js"
+
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
