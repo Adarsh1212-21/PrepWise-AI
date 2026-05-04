@@ -64,12 +64,7 @@ export const useInterview = () => {
         let response = null
         try {
             response = await generateResumePdf({ interviewReportId })
-            const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
-            const link = document.createElement("a")
-            link.href = url
-            link.setAttribute("download", `resume_${interviewReportId}.pdf`)
-            document.body.appendChild(link)
-            link.click()
+            
         }
         catch (error) {
             console.log(error)
@@ -79,12 +74,14 @@ export const useInterview = () => {
     }
 
     useEffect(() => {
-        if (interviewId) {
+    if (interviewId) {
+        if (!report || report._id !== interviewId) {  // ✅ only fetch if not already loaded
             getReportById(interviewId)
-        } else {
-            getReports()
         }
-    }, [ interviewId ])
+    } else {
+        getReports()
+    }
+}, [interviewId])
 
     return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
 
