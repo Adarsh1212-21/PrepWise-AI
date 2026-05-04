@@ -474,3 +474,18 @@ $font-stack:     'Inter', system-ui, -apple-system, sans-serif;
         &:hover { color: $text-primary; }
     }
 }
+
+.delete-btn {
+    margin-top: 8px;
+    padding: 6px 14px;
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+
+    &:hover {
+        background-color: #c53030;
+    }
+}

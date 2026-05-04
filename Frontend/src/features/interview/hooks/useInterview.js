@@ -30,12 +30,12 @@ export const useInterview = () => {
         return response.interviewReport
     }
 
-   const getReportById = async (interviewId) => {
+ const getReportById = async (interviewId) => {
     setLoading(true)
     let response = null
     try {
         response = await getInterviewReportById(interviewId)
-        if (response?.interviewReport) {        // ✅ null check
+        if (response?.interviewReport) {
             setReport(response.interviewReport)
         }
     } catch (error) {
@@ -43,7 +43,7 @@ export const useInterview = () => {
     } finally {
         setLoading(false)
     }
-    return response?.interviewReport || null    // ✅ safe return
+    return response?.interviewReport || null
 }
 
     const getReports = async () => {
