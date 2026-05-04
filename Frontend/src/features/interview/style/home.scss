@@ -476,16 +476,24 @@ $font-stack:     'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .delete-btn {
-    margin-top: 8px;
-    padding: 6px 14px;
-    background-color: #e53e3e;
-    color: white;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
-    font-size: 13px;
+    color: #e53e3e;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
 
     &:hover {
-        background-color: #c53030;
+        background: rgba(229, 62, 62, 0.1);
     }
+}
+
+// ✅ also make report-item relative so icon positions correctly
+.report-item {
+    position: relative;
 }
