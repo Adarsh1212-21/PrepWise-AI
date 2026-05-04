@@ -26,25 +26,24 @@ export const useInterview = () => {
         } finally {
             setLoading(false)
         }
-
         return response.interviewReport
     }
 
- const getReportById = async (interviewId) => {
-    setLoading(true)
-    let response = null
-    try {
-        response = await getInterviewReportById(interviewId)
-        if (response?.interviewReport) {
-            setReport(response.interviewReport)
+    const getReportById = async (interviewId) => {
+        setLoading(true)
+        let response = null
+        try {
+            response = await getInterviewReportById(interviewId)
+            if (response?.interviewReport) {
+                setReport(response.interviewReport)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
         }
-    } catch (error) {
-        console.log(error)
-    } finally {
-        setLoading(false)
+        return response?.interviewReport || null
     }
-    return response?.interviewReport || null
-}
 
     const getReports = async () => {
         setLoading(true)
@@ -57,18 +56,27 @@ export const useInterview = () => {
         } finally {
             setLoading(false)
         }
-
         return response.interviewReports
     }
 
     const getResumePdf = async (interviewReportId) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateResumePdf({ interviewReportId })
-            
+            await generateResumePdf({ interviewReportId })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
         }
-        catch (error) {
+    }
+
+    // ✅ moved inside
+    const deleteReport = async (interviewId) => {
+        setLoading(true)
+        try {
+            await deleteInterviewReport(interviewId)
+            setReports(prev => prev.filter(r => r._id !== interviewId))
+        } catch (error) {
             console.log(error)
         } finally {
             setLoading(false)
@@ -76,30 +84,15 @@ export const useInterview = () => {
     }
 
     useEffect(() => {
-    if (interviewId) {
-        if (!report || report._id.toString() !== interviewId) {  // ✅ convert to string
-            getReportById(interviewId)
+        if (interviewId) {
+            if (!report || report._id.toString() !== interviewId) {
+                getReportById(interviewId)
+            }
+        } else {
+            getReports()
         }
-    } else {
-        getReports()
-    }
-}, [interviewId])
+    }, [interviewId])
 
-    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
-
+    // ✅ single return with deleteReport included
+    return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
 }
-
-
-const deleteReport = async (interviewId) => {
-    setLoading(true)
-    try {
-        await deleteInterviewReport(interviewId)
-        setReports(prev => prev.filter(r => r._id !== interviewId))
-    } catch (error) {
-        console.log(error)
-    } finally {
-        setLoading(false)
-    }
-}
-
-return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
