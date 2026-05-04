@@ -30,19 +30,21 @@ export const useInterview = () => {
         return response.interviewReport
     }
 
-    const getReportById = async (interviewId) => {
-        setLoading(true)
-        let response = null
-        try {
-            response = await getInterviewReportById(interviewId)
+   const getReportById = async (interviewId) => {
+    setLoading(true)
+    let response = null
+    try {
+        response = await getInterviewReportById(interviewId)
+        if (response?.interviewReport) {        // ✅ null check
             setReport(response.interviewReport)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
         }
-        return response.interviewReport
+    } catch (error) {
+        console.log(error)
+    } finally {
+        setLoading(false)
     }
+    return response?.interviewReport || null    // ✅ safe return
+}
 
     const getReports = async () => {
         setLoading(true)
