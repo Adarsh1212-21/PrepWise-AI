@@ -14,10 +14,12 @@ const Home = () => {
     const navigate = useNavigate()
 
     const handleGenerateReport = async () => {
-        const resumeFile = resumeInputRef.current.files[ 0 ]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+    const resumeFile = resumeInputRef.current.files[0]
+    const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+    if (data) {
         navigate(`/interview/${data._id}`)
     }
+}
 
     const handleResumeChange = (e) => {
     const file = e.target.files[0]
