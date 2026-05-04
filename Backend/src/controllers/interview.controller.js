@@ -92,4 +92,10 @@ async function generateResumePdfController(req, res) {
     }
 }
 
+async function deleteInterviewReportController(req, res) {
+    const { interviewId } = req.params
+    await interviewReportModel.findOneAndDelete({ _id: interviewId, user: req.user.id })
+    res.status(200).json({ message: "Interview report deleted successfully." })
+}
+
 module.exports = { generateInterViewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePdfController }

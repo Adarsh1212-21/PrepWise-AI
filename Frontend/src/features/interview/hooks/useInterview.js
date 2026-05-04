@@ -1,4 +1,4 @@
-import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from "../services/interview.api"
+import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
 import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
@@ -75,7 +75,7 @@ export const useInterview = () => {
 
     useEffect(() => {
     if (interviewId) {
-        if (!report || report._id !== interviewId) {  // ✅ only fetch if not already loaded
+        if (!report || report._id.toString() !== interviewId) {  // ✅ convert to string
             getReportById(interviewId)
         }
     } else {
@@ -86,3 +86,18 @@ export const useInterview = () => {
     return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf }
 
 }
+
+
+const deleteReport = async (interviewId) => {
+    setLoading(true)
+    try {
+        await deleteInterviewReport(interviewId)
+        setReports(prev => prev.filter(r => r._id !== interviewId))
+    } catch (error) {
+        console.log(error)
+    } finally {
+        setLoading(false)
+    }
+}
+
+return { loading, report, reports, generateReport, getReportById, getReports, getResumePdf, deleteReport }
