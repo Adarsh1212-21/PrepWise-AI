@@ -30,7 +30,17 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
-            {loading ? null : children}
+             {loading ? (
+            <main style={{
+                background: "#0f0f1a",
+                height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
+                <h1 style={{ color: "white" }}>Loading...</h1>
+            </main>
+        ) : children}
         </AuthContext.Provider>
     )
 }

@@ -11,17 +11,18 @@ export const useAuth = () => {
 
 
     const handleLogin = async ({ email, password }) => {
-        setLoading(true)
-        try {
-            const data = await login({ email, password })
-            localStorage.setItem("token", data.token)
-            setUser(data.user)
-        } catch (err) {
-
-        } finally {
-            setLoading(false)
-        }
+    setLoading(true)
+    try {
+        const data = await login({ email, password })
+        localStorage.setItem("token", data.token)
+        setUser(data.user)
+        return true  
+    } catch (err) {
+        return false  
+    } finally {
+        setLoading(false)
     }
+}
 
     const handleRegister = async ({ username, email, password }) => {
         setLoading(true)
