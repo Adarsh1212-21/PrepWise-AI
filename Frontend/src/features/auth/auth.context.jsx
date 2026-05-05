@@ -30,15 +30,27 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
-             {loading ? (
+              {loading ? (
             <main style={{
-                 background: "linear-gradient(160deg, #f0f4ff 0%, #eef2ff 50%, #f5f0ff 100%)",
-                height: "100vh",
+                minHeight: "100vh",
+                background: "linear-gradient(160deg, #f0f4ff 0%, #eef2ff 50%, #f5f0ff 100%)",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
             }}>
-                <h1 style={{ color: "white" }}>Loading...</h1>
+                <div style={{ textAlign: "center" }}>
+                    <div style={{
+                        width: "48px",
+                        height: "48px",
+                        border: "4px solid #e2e8f0",
+                        borderTop: "4px solid #7c3aed",
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                        margin: "0 auto 1rem"
+                    }} />
+                    <p style={{ color: "#64748b", fontSize: "0.95rem" }}>Loading...</p>
+                </div>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </main>
         ) : children}
         </AuthContext.Provider>
