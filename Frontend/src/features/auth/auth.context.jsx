@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>
              {loading ? (
             <main style={{
-                background: "#0f0f1a",
+                 background: "linear-gradient(160deg, #f0f4ff 0%, #eef2ff 50%, #f5f0ff 100%)",
                 height: "100vh",
                 display: "flex",
                 alignItems: "center",
