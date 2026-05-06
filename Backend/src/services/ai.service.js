@@ -52,72 +52,39 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 }
 
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
-    const prompt = `Generate a professional, ATS-friendly resume as HTML for this candidate.
-                    Resume: ${resume}
-                    Self Description: ${selfDescription}
-                    Job Description: ${jobDescription}
+    const prompt = `Create a professional ATS-friendly resume as HTML.
 
-                    Return ONLY a JSON object: { "html": "<resume html here>" }
-                    No markdown, no explanation, just raw JSON.
+Resume: ${resume}
+Self Description: ${selfDescription}
+Job Description: ${jobDescription}
 
-                      STRICT LAYOUT RULES:
-                    - Outer wrapper: <div style="width:100%;font-family:Arial,sans-serif;font-size:13px;color:#222;box-sizing:border-box;line-height:1.6;padding:0 28px;">
-                    - All paragraph text must have: text-align:justify;
-                    - NO fixed pixel widths, NO overflow:hidden, NO tables, NO floats, NO position:absolute
-                    - All text must have word-wrap:break-word;overflow-wrap:break-word
-                    - For side-by-side content use display:flex;justify-content:space-between;width:100%;align-items:baseline;
-                    - Bullet points: <p style="margin:2px 0 2px 12px;text-align:left;">• text</p> NOT <ul><li>
+Return ONLY: { "html": "<resume html>" }
 
-                     HEADER SECTION (top of resume):
-                    - Name: <h1 style="text-align:center;font-size:24px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#1a3a5c;margin:0 0 4px;">NAME</h1>
-                    - Location + phone on one centered line: <p style="text-align:center;margin:2px 0;color:#444;">City, State | +91 XXXXXXXXXX</p>
-                    - Contact links — use the ACTUAL values from the resume (real email address, real LinkedIn URL label, real GitHub URL label):
-                      <div style="display:flex;justify-content:center;gap:0;margin:4px 0;">
-                        <a href="mailto:actual@email.com" style="color:#2c5f8a;text-decoration:none;">actual@email.com</a>
-                        <span style="margin:0 8px;color:#999;">|</span>
-                        <a href="https://linkedin.com/in/username" style="color:#2c5f8a;text-decoration:none;">LinkedIn</a>
-                        <span style="margin:0 8px;color:#999;">|</span>
-                        <a href="https://github.com/username" style="color:#2c5f8a;text-decoration:none;">GitHub</a>
-                        <span style="margin:0 8px;color:#999;">|</span>
-                        <a href="https://portfolio-url.com" style="color:#2c5f8a;text-decoration:none;">Portfolio</a>
-                      </div>
-                    - NEVER write the word "Email" — always use the actual email address as the link text
-                    - Horizontal rule after header: <hr style="border:none;border-top:2px solid #1a3a5c;margin:10px 0;">
+WRAPPER: <div style="width:100%;font-family:Arial,sans-serif;font-size:13px;color:#222;padding:0 28px;line-height:1.6;box-sizing:border-box;">
 
-                    SECTION HEADINGS:
-                    - <h2 style="font-size:13px;font-weight:bold;text-transform:uppercase;color:#1a3a5c;border-left:4px solid #2c5f8a;padding-left:8px;margin:16px 0 6px;">SECTION NAME</h2>
-                    - Always add <hr style="border:none;border-top:1px solid #d0d0d0;margin:4px 0 8px;"> immediately after each section heading
+HEADER:
+- <h1 style="text-align:center;font-size:24px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#1a3a5c;margin:0 0 4px;">NAME</h1>
+- <p style="text-align:center;margin:2px 0;color:#444;">City | Phone</p>
+- Centered links: <a href="mailto:email">email</a> | <a href="linkedin">LinkedIn</a> | <a href="github">GitHub</a> | <a href="portfolio">Portfolio</a> — use real values, NEVER the word "Email"
+- <hr style="border:none;border-top:2px solid #1a3a5c;margin:10px 0;">
 
-                    PROFESSIONAL SUMMARY:
-                    - 3-4 sentence paragraph tailored to the job description
-                    - <p style="margin:0 0 4px;line-height:1.7;">...</p>
+SECTION HEADINGS: <h2 style="font-size:13px;font-weight:bold;text-transform:uppercase;color:#1a3a5c;border-left:4px solid #2c5f8a;padding-left:8px;margin:16px 0 4px;">
+AFTER EACH HEADING: <hr style="border:none;border-top:1px solid #d0d0d0;margin:4px 0 8px;">
+EACH SECTION WRAPPED IN: <div style="page-break-inside:avoid;">
 
-                    TECHNICAL SKILLS:
-                    - Show as labeled rows, each label bolded: <p style="margin:3px 0;"><strong>Languages:</strong> JavaScript, Java, HTML5...</p>
-                    - Categories: Languages, Frontend, Backend, Databases, Tools & Tech
+SKILLS: <p style="margin:3px 0;"><strong>Category:</strong> items</p> — Categories: Languages, Frontend, Backend, Databases, Tools & Tech
 
-                    PROFESSIONAL EXPERIENCE:
-                    - Each role: flex row with <strong>Job Title | Company</strong> on left, <span>Month Year – Month Year</span> on right
-                    - 4-6 bullet points per role, starting with strong action verbs, quantify achievements where possible
+EXPERIENCE: flex row — <strong>Title | Company</strong> left, date right — 4 bullets with action verbs
 
-                    KEY PROJECTS (very important - must include this section):
-                    - Each project: flex row with <strong>Project Name (Tech Stack)</strong> on left, <a href="#">GitHub | Live</a> on right
-                    - 2-3 bullet points per project describing what was built and impact
+PROJECTS: flex row — <strong>Name (Stack)</strong> left, <a href="#">GitHub | Live</a> right — 2 bullets each
 
-                    EDUCATION:
-                    - Flex row: Degree + University on left, Date range on right
-                    - CGPA on next line
+EDUCATION: flex row — Degree + University left, date right — CGPA below
 
-                     CERTIFICATIONS:
-                    - Each cert as a simple line, NO descriptions, NO explanations after the dash:
-                      <p style="margin:3px 0;">• <strong>Certification Name – Issuer</strong></p>
-                    - Example: <p style="margin:3px 0;">• <strong>Oracle Cloud Infrastructure 2025 – Certified AI Foundations Associate</strong></p>
-                    - Keep it to one line per cert, name and issuer only
+CERTIFICATIONS: <p style="margin:3px 0;">• <strong>Cert Name – Issuer</strong></p> — one line only, no descriptions
 
-                    CONTENT RULES:
-                    - Tailor everything to the job description
-                    - Do NOT sound AI-generated
-                    - Include ALL sections: Summary, Skills, Experience, Projects, Education, Certifications`
+BULLETS: <p style="margin:2px 0 2px 12px;text-align:left;">• text</p>
+PARAGRAPHS: text-align:justify
+ALL TEXT: word-wrap:break-word`
 
     const response = await groq.chat.completions.create({
         model: "llama-3.1-8b-instant",
