@@ -15,7 +15,24 @@ const Home = () => {
 
     const handleGenerateReport = async () => {
     const resumeFile = resumeInputRef.current.files[0]
-    const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+
+    // ✅ validate before sending
+    if (!resumeFile && !selfDescription.trim()) {
+        alert("Please upload a resume or provide a self description")
+        return
+    }
+
+    if (!jobDescription.trim()) {
+        alert("Please provide a job description")
+        return
+    }
+
+    const data = await generateReport({ 
+        jobDescription, 
+        selfDescription, 
+        resumeFile: resumeFile || null   // ✅ send null not undefined
+    })
+
     if (data) {
         navigate(`/interview/${data._id}`)
     }

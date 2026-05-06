@@ -50,15 +50,21 @@ export const generateResumePdf = async ({ interviewReportId }) => {
     document.body.appendChild(element)
 
     await html2pdf()
-        .set({
-            margin: [20, 15],
-            filename: `resume_${interviewReportId}.pdf`,
-            image: { type: "jpeg", quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-        })
-        .from(element)
-        .save()
+    .set({
+        margin: [15, 10, 15, 0],  
+        filename: `resume_${interviewReportId}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            width: 794,
+            letterRendering: true  
+        },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        
+    })
+    .from(element)
+    .save()
 
     // ✅ clean up
     document.body.removeChild(element)
