@@ -52,7 +52,8 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 }
 
 async function generateResumePdf({ resume, selfDescription, jobDescription }) {
-    const prompt = `Create a professional ATS-friendly resume as HTML.
+    const prompt = `
+    Create a professional ATS-friendly resume as HTML and return as json.
 
 Resume: ${resume}
 Self Description: ${selfDescription}
