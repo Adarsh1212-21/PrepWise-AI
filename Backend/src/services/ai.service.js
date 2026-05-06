@@ -43,7 +43,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                         Do not include any explanation or markdown, just the raw JSON.`
 
     const response = await groq.chat.completions.create({
-        model: "llama-3.1-8b-instant",
+        model: "llama-3.3-70b-versatile",
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
     })
@@ -88,7 +88,8 @@ PARAGRAPHS: text-align:justify
 ALL TEXT: word-wrap:break-word`
 
     const response = await groq.chat.completions.create({
-        model: "llama-3.1-8b-instant",
+        model: "llama-3.3-70b-versatile",
+        max_tokens: 8000,
         messages: [{ role: "user", content: prompt }],
         response_format: { type: "json_object" },
     })
